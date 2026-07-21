@@ -437,7 +437,7 @@ export default function App() {
                 style={{ backgroundColor: "#16162E" }}
               >
                 <img
-                  src="artifacts/img/photo.jpg"
+                  src="assets/photo.jpg"
                   alt="Desenvolvedora trabalhando"
                   className="w-full h-full object-cover opacity-75"
                   style={{ filter: "grayscale(15%)" }}
