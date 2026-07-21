@@ -22,6 +22,7 @@ const BG = "#0D0D1F";
 const CREAM = "#F4EFE4";
 const MUTED = "#9B97C2";
 const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgogygge";
+const PHOTO_URL = new URL("../../assets/photo.jpg", import.meta.url).href;
 
 const NAV_LINKS = ["about", "projects", "contact"] as const;
 type Section = (typeof NAV_LINKS)[number];
@@ -437,7 +438,7 @@ export default function App() {
                 style={{ backgroundColor: "#16162E" }}
               >
                 <img
-                  src="assets/photo.jpg"
+                  src={PHOTO_URL}
                   alt="Desenvolvedora trabalhando"
                   className="w-full h-full object-cover opacity-75"
                   style={{ filter: "grayscale(15%)" }}
