@@ -21,6 +21,7 @@ const GREEN = "#3DD68C";
 const BG = "#0D0D1F";
 const CREAM = "#F4EFE4";
 const MUTED = "#9B97C2";
+const FORMSPREE_ENDPOINT = "https://formspree.io/f/xgogygge";
 
 const NAV_LINKS = ["about", "projects", "contact"] as const;
 type Section = (typeof NAV_LINKS)[number];
@@ -39,7 +40,7 @@ const PROJECTS = [
     color: TEAL,
     icon: Smartphone,
     link: "#",
-    github: "#",
+    github: "https://github.com/MarinaSDiniz/PROJETO",
   },
   {
     title: "Agência de Software",
@@ -48,7 +49,7 @@ const PROJECTS = [
     tech: ["React", "TypeScript", "Node.js", "SQL"],
     color: YELLOW,
     icon: Layers,
-    link: "#",
+    link: "https://www.instagram.com/p/DL5s00sRm3M/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==#",
     github: "#",
   },
   {
@@ -68,7 +69,7 @@ const PROJECTS = [
     tech: ["Docker", "Shell", "Node.js", "YAML"],
     color: GREEN,
     icon: Terminal,
-    link: "#",
+    link: "https://agenda.ooiac.com.br/login?warning=auth-required#",
     github: "#",
   },
 ];
@@ -118,6 +119,8 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const refs = {
     about: useRef<HTMLElement>(null),
@@ -143,11 +146,33 @@ export default function App() {
     setMenuOpen(false);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setFormData({ name: "", email: "", message: "" });
-    setTimeout(() => setSent(false), 4000);
+    setSubmitError("");
+    setSending(true);
+
+    try {
+      const response = await fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send form");
+      }
+
+      setSent(true);
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setSent(false), 4000);
+    } catch {
+      setSubmitError("Could not send your message right now. Please try again.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -171,7 +196,7 @@ export default function App() {
             >
               {"</>"}
             </span>
-            <span className="font-black text-base sm:text-lg tracking-tight text-foreground">dev.io</span>
+            <span className="font-black text-base sm:text-lg tracking-tight text-foreground">portfolio</span>
           </button>
 
           {/* desktop links */}
@@ -259,9 +284,8 @@ export default function App() {
             >
               Hi, I am
               <br />
-              <span style={{ color: TEAL }}>your name</span>
+              <span style={{ color: TEAL }}>Marina</span>
               <br />
-              here.
             </h1>
             <p className="text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 max-w-md" style={{ color: MUTED }}>
               Mobile developer passionate about building native experiences that actually work — from prototype to production.
@@ -284,13 +308,13 @@ export default function App() {
             </div>
 
             <div className="mt-10 sm:mt-14 flex items-center gap-5 sm:gap-6">
-              <a href="https://github.com" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
+              <a href="https://github.com/MarinaSDiniz" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub">
                 <Github size={18} />
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="LinkedIn">
+              <a href="https://www.linkedin.com/in/marina-silva-diniz-939a44199" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="LinkedIn">
                 <Linkedin size={18} />
               </a>
-              <a href="mailto:you@email.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email">
+              <a href="mailto:marinasilvadiniz@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email">
                 <Mail size={18} />
               </a>
               <span className="h-px flex-1 max-w-12 opacity-20" style={{ backgroundColor: CREAM }} />
@@ -409,11 +433,11 @@ export default function App() {
 
               {/* Photo */}
               <div
-                className="rounded-2xl overflow-hidden relative mt-2"
-                style={{ height: "180px", sm: { height: "220px" }, backgroundColor: "#16162E" }}
+                className="rounded-2xl overflow-hidden relative mt-2 h-[180px] sm:h-[220px]"
+                style={{ backgroundColor: "#16162E" }}
               >
                 <img
-                  src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=600&h=250&fit=crop&auto=format"
+                  src="artifacts/img/photo.jpg"
                   alt="Desenvolvedora trabalhando"
                   className="w-full h-full object-cover opacity-75"
                   style={{ filter: "grayscale(15%)" }}
@@ -457,7 +481,7 @@ export default function App() {
 
           <div className="mt-10 sm:mt-12 text-center">
             <a
-              href="https://github.com"
+              href="https://github.com/MarinaSDiniz"
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold border border-border text-muted-foreground hover:text-foreground hover:border-foreground transition-all duration-200"
@@ -499,9 +523,9 @@ export default function App() {
 
               <div className="space-y-4">
                 {[
-                  { icon: Mail, label: "Email", value: "you@email.com" },
-                  { icon: Linkedin, label: "LinkedIn", value: "linkedin.com/in/yourprofile" },
-                  { icon: Github, label: "GitHub", value: "github.com/yourprofile" },
+                  { icon: Mail, label: "Email", value: "marinasilvadiniz@gmail.com" },
+                  { icon: Linkedin, label: "LinkedIn", value: "https://www.linkedin.com/in/marina-silva-diniz-939a44199" },
+                  { icon: Github, label: "GitHub", value: "https://github.com/MarinaSDiniz" },
                 ].map(({ icon: Icon, label, value }) => (
                   <div key={label} className="flex items-center gap-4">
                     <div
@@ -541,6 +565,11 @@ export default function App() {
               ) : (
                 <>
                   <h3 className="text-lg font-bold text-foreground mb-5 sm:mb-6">Send a message</h3>
+                  {submitError && (
+                    <p className="mb-4 text-sm font-semibold" style={{ color: "#ff9d9d" }}>
+                      {submitError}
+                    </p>
+                  )}
                   <div className="space-y-4 sm:space-y-5">
                     <FormField label="Name" type="text" placeholder="Your name" value={formData.name} onChange={(v) => setFormData((f) => ({ ...f, name: v }))} />
                     <FormField label="Email" type="email" placeholder="your@email.com" value={formData.email} onChange={(v) => setFormData((f) => ({ ...f, email: v }))} />
@@ -560,10 +589,11 @@ export default function App() {
                     </div>
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                      disabled={sending}
+                      className="w-full flex items-center justify-center gap-2 py-3 rounded-xl font-bold text-sm transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                       style={{ backgroundColor: TEAL, color: BG }}
                     >
-                      Send <ArrowRight size={15} />
+                      {sending ? "Sending..." : "Send"} <ArrowRight size={15} />
                     </button>
                   </div>
                 </>
@@ -577,12 +607,12 @@ export default function App() {
       <footer className="py-6 sm:py-8 border-t border-border">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-4">
           <span className="text-xs text-center sm:text-left" style={{ fontFamily: "'DM Mono', monospace", color: MUTED }}>
-            © 2025 · Built with React + TypeScript ✨
+            © 2026· Built with React + TypeScript ✨
           </span>
           <div className="flex items-center gap-4">
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub"><Github size={16} /></a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="LinkedIn"><Linkedin size={16} /></a>
-            <a href="mailto:you@email.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email"><Mail size={16} /></a>
+            <a href="https://github.com/MarinaSDiniz" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="GitHub"><Github size={16} /></a>
+            <a href="https://www.linkedin.com/in/marina-silva-diniz-939a44199" target="_blank" rel="noreferrer" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="LinkedIn"><Linkedin size={16} /></a>
+            <a href="mailto:marinasilvadiniz@gmail.com" className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Email"><Mail size={16} /></a>
           </div>
         </div>
       </footer>
@@ -593,7 +623,7 @@ export default function App() {
 function CodeBlock() {
   const lines: { tokens: { text: string; color: string }[] }[] = [
     { tokens: [{ text: "const ", color: PURPLE }, { text: "dev", color: CREAM }, { text: " = {", color: MUTED }] },
-    { tokens: [{ text: "  name", color: GREEN }, { text: ": ", color: MUTED }, { text: '"Your Name"', color: YELLOW }, { text: ",", color: MUTED }] },
+    { tokens: [{ text: "  name", color: GREEN }, { text: ": ", color: MUTED }, { text: '"Marina"', color: YELLOW }, { text: ",", color: MUTED }] },
     { tokens: [{ text: "  focus", color: GREEN }, { text: ": ", color: MUTED }, { text: '"React Native"', color: YELLOW }, { text: ",", color: MUTED }] },
     { tokens: [{ text: "  stack", color: GREEN }, { text: ": [", color: MUTED }] },
     { tokens: [{ text: '    "TypeScript"', color: YELLOW }, { text: ",", color: MUTED }] },
